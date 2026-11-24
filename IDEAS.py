@@ -198,7 +198,9 @@ footer {
     visibility: hidden;
 }
 
-/* BOTONES DE LETRAS */
+/* ========================================================
+   BOTONES DE LETRAS - ESCRITORIO
+   ======================================================== */
 
 .st-key-btn_S button,
 .st-key-btn_C button,
@@ -255,7 +257,7 @@ footer {
     margin: 0 !important;
 }
 
-/* COLORES */
+/* COLORES ORIGINALES */
 
 .st-key-btn_S button {
     background-color: #DFD862 !important;
@@ -293,12 +295,14 @@ footer {
     background-color: #F1F5F9 !important;
 }
 
+
 /* ========================================================
-   CORRECCION PARA CELULARES
-   MANTENER LAS DOS COLUMNAS
+   ADAPTACION PARA TELEFONOS
    ======================================================== */
 
 @media (max-width: 768px) {
+
+    /* CONTENEDOR GENERAL */
 
     .block-container {
         padding-top: 0.8rem !important;
@@ -312,24 +316,78 @@ footer {
         font-size: 1.4rem !important;
     }
 
-    /* IMPORTANTE:
-       Evita que las columnas se apilen verticalmente. */
+    /* ----------------------------------------------------
+       FILAS DE DOS LETRAS
+       S-C / A-M / P-E
 
-    div[data-testid="stHorizontalBlock"] {
+       Se limita el ancho de cada fila para que las
+       columnas no se separen por toda la pantalla.
+       ---------------------------------------------------- */
+
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_S),
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_A),
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_P) {
+
+        width: 160px !important;
+        max-width: 160px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
+        justify-content: center !important;
         align-items: center !important;
+
         gap: 8px !important;
     }
 
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    /* Las dos columnas tienen el mismo ancho */
+
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_S) > div[data-testid="column"],
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_A) > div[data-testid="column"],
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_P) > div[data-testid="column"] {
+
         min-width: 0 !important;
+        flex: 1 1 0 !important;
         width: 50% !important;
-        flex: 1 1 0% !important;
     }
 
-    /* TAMAÑO DE LOS BOTONES */
+
+    /* ----------------------------------------------------
+       FILA DE LA R
+
+       Tres espacios iguales: vacío - R - vacío.
+       Así queda centrada debajo de P y E.
+       ---------------------------------------------------- */
+
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_R) {
+
+        width: 240px !important;
+        max-width: 240px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: center !important;
+        align-items: center !important;
+
+        gap: 8px !important;
+    }
+
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_R) > div[data-testid="column"] {
+
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+        width: 33.333% !important;
+    }
+
+
+    /* ----------------------------------------------------
+       TAMAÑO DE LOS BOTONES EN TELEFONO
+       ---------------------------------------------------- */
 
     .st-key-btn_S button,
     .st-key-btn_C button,
@@ -339,17 +397,20 @@ footer {
     .st-key-btn_E button,
     .st-key-btn_R button {
 
-        width: clamp(76px, 26vw, 96px) !important;
-        min-width: 0 !important;
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
 
-        height: clamp(76px, 26vw, 96px) !important;
-        min-height: 0 !important;
+        height: 72px !important;
+        min-height: 72px !important;
 
         margin: 3px auto !important;
-        border-radius: 14px !important;
+        padding: 0 !important;
+
+        border-radius: 13px !important;
     }
 
-    /* LETRAS MAS PEQUEÑAS */
+    /* LETRAS EN TELEFONO */
 
     .st-key-btn_S button p,
     .st-key-btn_C button p,
@@ -359,14 +420,14 @@ footer {
     .st-key-btn_E button p,
     .st-key-btn_R button p {
 
-        font-size: 38px !important;
+        font-size: 34px !important;
         font-weight: 800 !important;
     }
 
-    /* ESPACIO ENTRE ELEMENTOS */
+    /* ESPACIO VERTICAL ENTRE FILAS */
 
     div[data-testid="stVerticalBlock"] {
-        gap: 0.35rem;
+        gap: 0.25rem !important;
     }
 
     /* BOTONES DE PREGUNTAS */
@@ -382,7 +443,10 @@ footer {
     }
 }
 
-/* CELULARES MUY PEQUEÑOS */
+
+/* ========================================================
+   TELEFONOS PEQUEÑOS
+   ======================================================== */
 
 @media (max-width: 380px) {
 
@@ -394,10 +458,12 @@ footer {
     .st-key-btn_E button,
     .st-key-btn_R button {
 
-        width: 76px !important;
-        min-width: 76px !important;
-        height: 76px !important;
-        min-height: 76px !important;
+        width: 68px !important;
+        min-width: 68px !important;
+        max-width: 68px !important;
+
+        height: 68px !important;
+        min-height: 68px !important;
     }
 
     .st-key-btn_S button p,
@@ -408,7 +474,21 @@ footer {
     .st-key-btn_E button p,
     .st-key-btn_R button p {
 
-        font-size: 34px !important;
+        font-size: 32px !important;
+    }
+
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_S),
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_A),
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_P) {
+
+        width: 152px !important;
+        max-width: 152px !important;
+    }
+
+    div[data-testid="stHorizontalBlock"]:has(.st-key-btn_R) {
+
+        width: 224px !important;
+        max-width: 224px !important;
     }
 }
 

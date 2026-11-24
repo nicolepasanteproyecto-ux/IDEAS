@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 24 08:12:19 2026
 
-@author: practicante-im
-"""
+# -*- coding: utf-8 -*-
+
 import streamlit as st
 import pandas as pd
 import os
+from datetime import datetime
 
 # ============================================================
 # CONFIGURACION
@@ -121,13 +119,37 @@ preguntas_scamper = {
 }
 
 # ============================================================
-# FUNCION PARA CAMBIAR DE PANTALLA
+# FUNCIONES
 # ============================================================
 
 def seleccionar_letra(letra):
     st.session_state.letra_elegida = letra
     st.session_state.pantalla = 2
     st.session_state.idea_guardada = False
+
+
+def guardar_idea(letra, pregunta, idea):
+    nueva_idea = pd.DataFrame([{
+        "Fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Letra": letra,
+        "Pregunta": pregunta,
+        "Idea": idea
+    }])
+
+    if os.path.exists(ARCHIVO_IDEAS):
+        try:
+            datos = pd.read_csv(ARCHIVO_IDEAS, encoding="utf-8-sig")
+            datos = pd.concat([datos, nueva_idea], ignore_index=True)
+        except Exception:
+            datos = nueva_idea
+    else:
+        datos = nueva_idea
+
+    datos.to_csv(
+        ARCHIVO_IDEAS,
+        index=False,
+        encoding="utf-8-sig"
+    )
 
 
 # ============================================================
@@ -143,7 +165,7 @@ st.markdown("""
     background-color: #FFFFFF;
 }
 
-/* CONTENEDOR PRINCIPAL */
+/* CONTENEDOR */
 
 .block-container {
     padding-top: 1.5rem;
@@ -157,7 +179,7 @@ h1 {
     font-weight: 800 !important;
 }
 
-/* OCULTAR MENU */
+/* OCULTAR MENU Y PIE */
 
 #MainMenu {
     visibility: hidden;
@@ -167,11 +189,7 @@ footer {
     visibility: hidden;
 }
 
-/* =====================================================
-   BOTONES SCAMPER
-   ===================================================== */
-
-/* TAMAÑO GENERAL DE LOS BOTONES */
+/* BOTONES DE LETRAS */
 
 .st-key-btn_S button,
 .st-key-btn_C button,
@@ -183,13 +201,11 @@ footer {
 
     width: 110px !important;
     min-width: 110px !important;
-
     height: 110px !important;
     min-height: 110px !important;
 
     border-radius: 16px !important;
     border: none !important;
-
     box-shadow: none !important;
 
     display: flex !important;
@@ -197,7 +213,6 @@ footer {
     justify-content: center !important;
 
     margin: 5px auto !important;
-
     transition: transform 0.15s ease !important;
 }
 
@@ -228,87 +243,50 @@ footer {
     font-size: 46px !important;
     font-weight: 800 !important;
     color: #000000 !important;
-
     margin: 0 !important;
     line-height: 1 !important;
 }
 
 /* COLORES */
 
-.st-key-btn_S button {
-    background-color: #DFD862 !important;
-}
+.st-key-btn_S button { background-color: #DFD862 !important; }
+.st-key-btn_C button { background-color: #E7AD70 !important; }
+.st-key-btn_A button { background-color: #9EEB6D !important; }
+.st-key-btn_M button { background-color: #6B82EA !important; }
+.st-key-btn_P button { background-color: #B46AE8 !important; }
+.st-key-btn_E button { background-color: #EB6E60 !important; }
+.st-key-btn_R button { background-color: #70C3E4 !important; }
 
-.st-key-btn_C button {
-    background-color: #E7AD70 !important;
-}
-
-.st-key-btn_A button {
-    background-color: #9EEB6D !important;
-}
-
-.st-key-btn_M button {
-    background-color: #6B82EA !important;
-}
-
-.st-key-btn_P button {
-    background-color: #B46AE8 !important;
-}
-
-.st-key-btn_E button {
-    background-color: #EB6E60 !important;
-}
-
-.st-key-btn_R button {
-    background-color: #70C3E4 !important;
-}
-
-/* =====================================================
-   BOTON VOLVER
-   ===================================================== */
+/* BOTON VOLVER */
 
 .st-key-btn_volver button {
-
     min-height: 45px !important;
-
     border: 1px solid #E2E8F0 !important;
     background-color: #F1F5F9 !important;
-
     margin-top: 15px !important;
 }
 
 .st-key-btn_volver button p {
-
     font-size: 15px !important;
     font-weight: 600 !important;
     color: #475569 !important;
 }
 
-/* =====================================================
-   RESPONSIVE PARA CELULARES
-   ===================================================== */
+/* RESPONSIVE PARA CELULARES */
 
 @media (max-width: 768px) {
 
-    /* CONTENEDOR */
-
     .block-container {
-
         padding-top: 0.8rem !important;
         padding-left: 0.5rem !important;
         padding-right: 0.5rem !important;
         padding-bottom: 1rem !important;
-
         max-width: 100% !important;
     }
-
-    /* TITULOS */
 
     h1 {
         font-size: 1.4rem !important;
     }
-
-    /* BOTONES SCAMPER */
 
     .st-key-btn_S button,
     .st-key-btn_C button,
@@ -320,16 +298,12 @@ footer {
 
         width: clamp(76px, 26vw, 96px) !important;
         min-width: 0 !important;
-
         height: clamp(76px, 26vw, 96px) !important;
         min-height: 0 !important;
 
         margin: 3px auto !important;
-
         border-radius: 14px !important;
     }
-
-    /* LETRAS EN CELULAR */
 
     .st-key-btn_S button p,
     .st-key-btn_C button p,
@@ -343,31 +317,22 @@ footer {
         font-weight: 800 !important;
     }
 
-    /* ESPACIOS */
-
     div[data-testid="stVerticalBlock"] {
         gap: 0.35rem;
     }
 
-    /* PREGUNTAS */
-
     div[data-testid="stButton"] button {
-
         padding: 10px 8px !important;
         min-height: 42px !important;
     }
 
     div[data-testid="stButton"] button p {
-
         font-size: 13px !important;
         line-height: 1.35 !important;
     }
-
 }
 
-/* =====================================================
-   CELULARES PEQUEÑOS
-   ===================================================== */
+/* CELULARES PEQUEÑOS */
 
 @media (max-width: 380px) {
 
@@ -381,7 +346,6 @@ footer {
 
         width: 76px !important;
         min-width: 76px !important;
-
         height: 76px !important;
         min-height: 76px !important;
     }
@@ -393,10 +357,8 @@ footer {
     .st-key-btn_P button p,
     .st-key-btn_E button p,
     .st-key-btn_R button p {
-
         font-size: 34px !important;
     }
-
 }
 
 </style>
@@ -425,13 +387,11 @@ if st.session_state.pantalla == 1:
     )
 
     with c1:
-
         if st.button("S", key="btn_S"):
             seleccionar_letra("S - Sustituir")
             st.rerun()
 
     with c2:
-
         if st.button("C", key="btn_C"):
             seleccionar_letra("C - Combinar")
             st.rerun()
@@ -444,13 +404,11 @@ if st.session_state.pantalla == 1:
     )
 
     with c3:
-
         if st.button("A", key="btn_A"):
             seleccionar_letra("A - Adaptar")
             st.rerun()
 
     with c4:
-
         if st.button("M", key="btn_M"):
             seleccionar_letra("M - Modificar")
             st.rerun()
@@ -463,20 +421,16 @@ if st.session_state.pantalla == 1:
     )
 
     with c5:
-
         if st.button("P", key="btn_P"):
             seleccionar_letra("P - Proponer otros usos")
             st.rerun()
 
     with c6:
-
         if st.button("E", key="btn_E"):
             seleccionar_letra("E - Eliminar")
             st.rerun()
 
-    # ========================================================
-    # FILA 4: R CENTRADA DEBAJO DE P Y E
-    # ========================================================
+    # FILA 4: R CENTRADA
 
     _, c7, _ = st.columns(
         [1, 1, 1],
@@ -484,7 +438,6 @@ if st.session_state.pantalla == 1:
     )
 
     with c7:
-
         if st.button("R", key="btn_R"):
             seleccionar_letra("R - Reorganizar")
             st.rerun()
@@ -528,7 +481,6 @@ elif st.session_state.pantalla == 2:
 
         st.session_state.pantalla = 1
         st.session_state.pregunta_elegida = ""
-
         st.rerun()
 
 
@@ -558,14 +510,12 @@ elif st.session_state.pantalla == 3:
             c1, c2 = st.columns(2)
 
             with c1:
-
                 cambiar = st.form_submit_button(
                     "⬅️ Cambiar pregunta",
                     use_container_width=True
                 )
 
             with c2:
-
                 enviar = st.form_submit_button(
                     "🚀 Enviar mi idea",
                     type="primary",
@@ -575,3 +525,54 @@ elif st.session_state.pantalla == 3:
         if cambiar:
 
             st.session_state.pantalla = 2
+            st.rerun()
+
+        if enviar:
+
+            if not idea_usuario.strip():
+
+                st.warning("Por favor, escribe tu idea antes de enviarla.")
+
+            else:
+
+                try:
+                    guardar_idea(
+                        st.session_state.letra_elegida,
+                        st.session_state.pregunta_elegida,
+                        idea_usuario.strip()
+                    )
+
+                    st.session_state.idea_guardada = True
+                    st.rerun()
+
+                except Exception as error:
+                    st.error(f"No se pudo guardar la idea: {error}")
+
+    else:
+
+        st.success("¡Tu idea fue registrada correctamente!")
+
+        st.markdown(
+            """
+            <div style="text-align:center; font-size:55px; padding:15px;">
+                🚗💨
+            </div>
+            <div style="text-align:center; font-size:20px; font-weight:bold;">
+                ¡Gracias por compartir tu idea!
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        if st.button(
+            "🔄 Registrar otra idea",
+            type="primary",
+            use_container_width=True
+        ):
+
+            st.session_state.pantalla = 1
+            st.session_state.letra_elegida = ""
+            st.session_state.pregunta_elegida = ""
+            st.session_state.idea_guardada = False
+
+            st.rerun()

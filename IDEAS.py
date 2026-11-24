@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 
 # ============================================================
-# CONFIGURACION
+# CONFIGURACION GENERAL
 # ============================================================
 
 st.set_page_config(
@@ -34,8 +34,9 @@ if "pregunta_elegida" not in st.session_state:
 if "idea_guardada" not in st.session_state:
     st.session_state.idea_guardada = False
 
+
 # ============================================================
-# PREGUNTAS OFICIALES SCAMPER
+# PREGUNTAS SCAMPER
 # ============================================================
 
 preguntas_scamper = {
@@ -118,6 +119,7 @@ preguntas_scamper = {
     ]
 }
 
+
 # ============================================================
 # FUNCIONES
 # ============================================================
@@ -129,6 +131,7 @@ def seleccionar_letra(letra):
 
 
 def guardar_idea(letra, pregunta, idea):
+
     nueva_idea = pd.DataFrame([{
         "Fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "Letra": letra,
@@ -138,8 +141,14 @@ def guardar_idea(letra, pregunta, idea):
 
     if os.path.exists(ARCHIVO_IDEAS):
         try:
-            datos = pd.read_csv(ARCHIVO_IDEAS, encoding="utf-8-sig")
-            datos = pd.concat([datos, nueva_idea], ignore_index=True)
+            datos = pd.read_csv(
+                ARCHIVO_IDEAS,
+                encoding="utf-8-sig"
+            )
+            datos = pd.concat(
+                [datos, nueva_idea],
+                ignore_index=True
+            )
         except Exception:
             datos = nueva_idea
     else:
@@ -153,13 +162,13 @@ def guardar_idea(letra, pregunta, idea):
 
 
 # ============================================================
-# ESTILOS CSS
+# DISEÑO CSS
 # ============================================================
 
 st.markdown("""
 <style>
 
-/* FONDO */
+/* FONDO GENERAL */
 
 .stApp {
     background-color: #FFFFFF;
@@ -168,18 +177,18 @@ st.markdown("""
 /* CONTENEDOR */
 
 .block-container {
+    max-width: 850px;
     padding-top: 1.5rem;
     padding-bottom: 2rem;
-    max-width: 850px;
 }
 
-/* TITULOS */
+/* TITULO */
 
 h1 {
     font-weight: 800 !important;
 }
 
-/* OCULTAR MENU Y PIE */
+/* OCULTAR ELEMENTOS */
 
 #MainMenu {
     visibility: hidden;
@@ -206,17 +215,17 @@ footer {
 
     border-radius: 16px !important;
     border: none !important;
-    box-shadow: none !important;
 
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 
-    margin: 5px auto !important;
+    margin: 4px auto !important;
+
     transition: transform 0.15s ease !important;
 }
 
-/* EFECTO HOVER */
+/* EFECTO AL PASAR EL CURSOR */
 
 .st-key-btn_S button:hover,
 .st-key-btn_C button:hover,
@@ -242,20 +251,39 @@ footer {
 
     font-size: 46px !important;
     font-weight: 800 !important;
-    color: #000000 !important;
+    color: #222222 !important;
     margin: 0 !important;
-    line-height: 1 !important;
 }
 
 /* COLORES */
 
-.st-key-btn_S button { background-color: #DFD862 !important; }
-.st-key-btn_C button { background-color: #E7AD70 !important; }
-.st-key-btn_A button { background-color: #9EEB6D !important; }
-.st-key-btn_M button { background-color: #6B82EA !important; }
-.st-key-btn_P button { background-color: #B46AE8 !important; }
-.st-key-btn_E button { background-color: #EB6E60 !important; }
-.st-key-btn_R button { background-color: #70C3E4 !important; }
+.st-key-btn_S button {
+    background-color: #DFD862 !important;
+}
+
+.st-key-btn_C button {
+    background-color: #E7AD70 !important;
+}
+
+.st-key-btn_A button {
+    background-color: #9EEB6D !important;
+}
+
+.st-key-btn_M button {
+    background-color: #6B82EA !important;
+}
+
+.st-key-btn_P button {
+    background-color: #B46AE8 !important;
+}
+
+.st-key-btn_E button {
+    background-color: #EB6E60 !important;
+}
+
+.st-key-btn_R button {
+    background-color: #70C3E4 !important;
+}
 
 /* BOTON VOLVER */
 
@@ -263,16 +291,12 @@ footer {
     min-height: 45px !important;
     border: 1px solid #E2E8F0 !important;
     background-color: #F1F5F9 !important;
-    margin-top: 15px !important;
 }
 
-.st-key-btn_volver button p {
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    color: #475569 !important;
-}
-
-/* RESPONSIVE PARA CELULARES */
+/* ========================================================
+   CORRECCION PARA CELULARES
+   MANTENER LAS DOS COLUMNAS
+   ======================================================== */
 
 @media (max-width: 768px) {
 
@@ -288,6 +312,25 @@ footer {
         font-size: 1.4rem !important;
     }
 
+    /* IMPORTANTE:
+       Evita que las columnas se apilen verticalmente. */
+
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        min-width: 0 !important;
+        width: 50% !important;
+        flex: 1 1 0% !important;
+    }
+
+    /* TAMAÑO DE LOS BOTONES */
+
     .st-key-btn_S button,
     .st-key-btn_C button,
     .st-key-btn_A button,
@@ -298,12 +341,15 @@ footer {
 
         width: clamp(76px, 26vw, 96px) !important;
         min-width: 0 !important;
+
         height: clamp(76px, 26vw, 96px) !important;
         min-height: 0 !important;
 
         margin: 3px auto !important;
         border-radius: 14px !important;
     }
+
+    /* LETRAS MAS PEQUEÑAS */
 
     .st-key-btn_S button p,
     .st-key-btn_C button p,
@@ -317,9 +363,13 @@ footer {
         font-weight: 800 !important;
     }
 
+    /* ESPACIO ENTRE ELEMENTOS */
+
     div[data-testid="stVerticalBlock"] {
         gap: 0.35rem;
     }
+
+    /* BOTONES DE PREGUNTAS */
 
     div[data-testid="stButton"] button {
         padding: 10px 8px !important;
@@ -332,7 +382,7 @@ footer {
     }
 }
 
-/* CELULARES PEQUEÑOS */
+/* CELULARES MUY PEQUEÑOS */
 
 @media (max-width: 380px) {
 
@@ -357,6 +407,7 @@ footer {
     .st-key-btn_P button p,
     .st-key-btn_E button p,
     .st-key-btn_R button p {
+
         font-size: 34px !important;
     }
 }
@@ -381,10 +432,7 @@ if st.session_state.pantalla == 1:
 
     # FILA 1: S - C
 
-    _, c1, c2, _ = st.columns(
-        [0.8, 1, 1, 0.8],
-        gap="small"
-    )
+    c1, c2 = st.columns(2, gap="small")
 
     with c1:
         if st.button("S", key="btn_S"):
@@ -398,46 +446,37 @@ if st.session_state.pantalla == 1:
 
     # FILA 2: A - M
 
-    _, c3, c4, _ = st.columns(
-        [0.8, 1, 1, 0.8],
-        gap="small"
-    )
+    c1, c2 = st.columns(2, gap="small")
 
-    with c3:
+    with c1:
         if st.button("A", key="btn_A"):
             seleccionar_letra("A - Adaptar")
             st.rerun()
 
-    with c4:
+    with c2:
         if st.button("M", key="btn_M"):
             seleccionar_letra("M - Modificar")
             st.rerun()
 
     # FILA 3: P - E
 
-    _, c5, c6, _ = st.columns(
-        [0.8, 1, 1, 0.8],
-        gap="small"
-    )
+    c1, c2 = st.columns(2, gap="small")
 
-    with c5:
+    with c1:
         if st.button("P", key="btn_P"):
             seleccionar_letra("P - Proponer otros usos")
             st.rerun()
 
-    with c6:
+    with c2:
         if st.button("E", key="btn_E"):
             seleccionar_letra("E - Eliminar")
             st.rerun()
 
     # FILA 4: R CENTRADA
 
-    _, c7, _ = st.columns(
-        [1, 1, 1],
-        gap="small"
-    )
+    c1, c2, c3 = st.columns(3, gap="small")
 
-    with c7:
+    with c2:
         if st.button("R", key="btn_R"):
             seleccionar_letra("R - Reorganizar")
             st.rerun()
@@ -523,7 +562,6 @@ elif st.session_state.pantalla == 3:
                 )
 
         if cambiar:
-
             st.session_state.pantalla = 2
             st.rerun()
 
@@ -531,7 +569,9 @@ elif st.session_state.pantalla == 3:
 
             if not idea_usuario.strip():
 
-                st.warning("Por favor, escribe tu idea antes de enviarla.")
+                st.warning(
+                    "Por favor, escribe tu idea antes de enviarla."
+                )
 
             else:
 
@@ -546,17 +586,22 @@ elif st.session_state.pantalla == 3:
                     st.rerun()
 
                 except Exception as error:
-                    st.error(f"No se pudo guardar la idea: {error}")
+                    st.error(
+                        f"No se pudo guardar la idea: {error}"
+                    )
 
     else:
 
-        st.success("¡Tu idea fue registrada correctamente!")
+        st.success(
+            "¡Tu idea fue registrada correctamente!"
+        )
 
         st.markdown(
             """
             <div style="text-align:center; font-size:55px; padding:15px;">
                 🚗💨
             </div>
+
             <div style="text-align:center; font-size:20px; font-weight:bold;">
                 ¡Gracias por compartir tu idea!
             </div>
